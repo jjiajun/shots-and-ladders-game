@@ -1,0 +1,122 @@
+load localhost:3004/home
+-> register
+-> login
+-> redirect to game: localhost:3004/start
+
+Player clicks 'Start' 
+-> randomly select 2nd player from user db
+-> create an entry in game db (playersNames, playersPosition, playersShotCounter, winner)
+-> display shots-and-ladders board
+
+Player clicks 'Roll Dice'
+-> Rolls 2 dice
+-> sum dice numbers as x and move the player by x steps
+-> if any player lands on "Drink 1 shot" tile, playerXShotCounter += 1
+-> if playerXShotCounter % 5 === 0:
+  -> playerX gains superpower (give away the next shot to another player)
+  -> next shot does not count towards playerXShotCounter 
+
+-> update game db (playersNames, playersPosition, playersShotCounter, winner)
+-> send AJAX request to retrieve updated data from DB and re-render the page using JS to:
+  -> display status of each player (what is written in the tile that they are in e.g. Drink 1 shot, Truth or Dare)
+  -> display how many shots each player has taken
+  -> display "winner is ____" (if any player reaches finishing tile)
+
+*Additional Features (if there is time)*
+-> At start page:
+  -> play with bot
+  -> play with friends
+-> If choose "play with friends":
+  -> 2 players
+  -> 3 players
+  -> 4 players
+  -> 5 players
+-> Sockets?
+-> Let players input list of dares separately from their owncocode 
+
+  JSON format:
+  -> playersNames: {"player1": __"Tristan", "player2": "Playboy Foong", ...}
+  -> playersPosition: {"player1": "1", "player2":"15", ...}
+  -> playersShotCounter: {"player1": 2, "player2":6, ...}
+  -> winner: {"player1"}
+
+
+*Seed data*
+-> tiles data ('Drink one shot', 'Truth or Dare')
+
+// Nav bar code
+
+
+  <!-- <div id="wrapper"> -->
+    <!-- sidebar -->
+    <!-- <div id="sidebar-wrapper" class="d-flex flex-column justify-content-between pb-5 sticky-top">
+      <div>
+        <h3 class="text-center text-white m-3">Timetrack.io</h3>
+        <div class="link-div text-center text-white m-3">
+          <a href="/logs">Logs</a>
+        </div>
+        <div class="link-div text-center link-light m-3">
+          <a href="/stats">Stats</a>
+        </div>
+        <div class="link-div text-center link-light m-3">
+          <a href="/activities">Activities</a>
+        </div>
+      </div>
+      <div>
+        <div class="link-div text-center text-white m-3">
+          <a href="/logout">Logout</a>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- page content -->
+    <!-- <div id="page-content-wrapper">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <a href="#" class="btn btn-success" id="menu-toggle">Toggle Menu</a> -->
+
+
+
+
+
+
+var board = document.getElementById('boardInner');
+var numContainer = document.getElementById('numberContainer');
+var letterContainer = document.getElementById('letterContainer');
+
+const renderBoard1 = (useLabels) =>{
+  
+  if (useLabels){
+    renderLabels() 
+  }
+ 
+  for (var i = 0; i < letters.length; ++i){
+    var row = document.createElement('DIV')
+    row.className = 'row'
+    row.style.flexDirection = i % 2 === 0 ? '' : 'row-reverse'; 
+    for (var j = 0; j < letters.length; ++j){
+      var square = document.createElement('DIV')
+      square.className = 'square'
+      square.style.backgroundColor = j % 2 === 0 ? 'white' : 'black'
+      row.appendChild(square)
+    }
+    board.appendChild(row)
+  }
+ }
+
+renderLabels = () => {
+  letters.forEach((x,i)=>{
+    var el = document.createElement('DIV')
+    var el2 = document.createElement('DIV')
+    el.innerText = x
+    el.className = 'label'
+    el2.innerText = numbers[i]
+    el2.className = 'label'
+    numContainer.appendChild(el2)
+    letterContainer.appendChild(el)
+  })
+}
+
+// pass true as the argument in the function below to render the labels.
+renderBoard1()

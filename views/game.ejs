@@ -1,0 +1,22 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div id='boardOuter'>
+  <div id="leftPanel">  
+  </div>
+  <div id='boardInner'>
+    <img src='/images/snakemini.png' class='snake' id='snake1' alt='image' />
+    <img src='/images/snakemini.png' class='snake' id='snake2' alt='image' />
+    <img src='/images/snakemini.png' class='snake' id='snake3' alt='image' />
+    <img src='/images/ladder.png' class='ladder' id='ladder1' alt='image' />
+    <img src='/images/ladder.png' class='ladder' id='ladder2' alt='image' />
+    <img src='/images/ladder.png' class='ladder' id='ladder3' alt='image' />
+    <!-- <img src='/images/shotglass.png' class='shot' alt='image' /> -->
+  </div>
+  <div id="rightPanel">  
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/game-script.js"></script>
+<%- include ('partials/footer') %>

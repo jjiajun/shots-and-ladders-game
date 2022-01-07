@@ -1,0 +1,210 @@
+body {
+  display: block;
+  margin: auto;
+  width: 500px;
+  margin-top: 10px;
+}
+
+.square {
+  width: 50px;
+  height: 50px;
+  display: inline-flex;
+  margin: 0px;
+  animation: fadeIn 1s;
+  border-left: solid 1px black;
+  border-top: solid 1px black;
+  /* align-items: end; */
+  padding: 1px 4px;
+  font-size: 8px;
+  text-align: end;
+}
+
+#boardOuter {
+  display: flex;
+  flex-direction: row;
+  margin: auto;
+  padding: 20px;
+  width: 100%;
+}
+
+#boardInner {
+  width: 303px;
+  height: 303px;
+  display: inline-flex;
+  flex-wrap: wrap;
+  margin: auto;
+  border: solid 1px black;
+  border-right: solid 2px black;
+  border-bottom: solid 2px black;
+  position: relative;
+}
+
+#leftPanel {
+  width: 100px;
+  height: 100%;
+  margin-left: 24px;
+}
+
+#rightPanel {
+  width: 100px;
+  display: inline-block;
+  height: 100%;
+  margin-top: 1px;
+  padding: 10px;
+}
+
+.label {
+  width: 25px;
+  height: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.row {
+  display: flex;
+  width: 300px;
+  height: 50px;
+  margin: 0px;
+}
+
+/* @keyframes fadeIn {
+  0% {
+    transform: rotateY(180deg);
+  }
+  100% {
+    transform: rotateY(0deg);
+  }
+} */
+
+.player-icon {
+  border-radius: 100%;
+  width: 8px;
+  height: 8px;
+  margin: auto;
+  display: none;
+  border: black;
+  border-width: 1px;
+}
+
+#player1 {
+  background-color: rgb(216, 25, 25);
+  float: initial;
+  z-index: 1;
+  border: 1px solid black;
+  /* position: relative;
+  z-index: 1; */
+}
+#player2 {
+  background-color: rgb(16, 108, 184);
+  z-index: 2;
+  float: initial;
+  /* position: relative;
+  z-index: 1; */
+  /* position: absolute;
+  top: 23px;
+  left: 23px; */
+}
+#player3 {
+  background-color: rgb(255, 217, 0);
+  z-index: 2;
+  float: initial;
+  /* position: absolute;
+  top: 23px;
+  left: 23px; */
+}
+#player4 {
+  background-color: rgb(10, 192, 137);
+  z-index: 2;
+  float: initial;
+  /* position: absolute;
+  top: 23px;
+  left: 23px; */
+}
+#player5 {
+  background-color: purple;
+  /* position: absolute;
+  top: 23px;
+  left: 23px; */
+}
+#player6 {
+  background-color: pink;
+  /* position: absolute;
+  top: 23px;
+  left: 23px; */
+}
+
+.truthOrDare {
+  font-size: 7px;
+  margin: auto;
+  color: red;
+  width: 30px;
+  z-index: 0;
+}
+
+.takeAShot {
+  font-size: 7px;
+  margin: auto;
+  color: black;
+  font-weight: bold;
+  z-index: 0;
+}
+
+.snake {
+  position: absolute;
+  z-index: 2;
+}
+
+.ladder {
+  position: absolute;
+
+  z-index: 2;
+}
+
+.shot {
+  position: absolute;
+}
+
+#snake1 {
+  transform: rotate(20deg);
+  height: 100px;
+}
+
+#snake2 {
+  transform: rotate(-30deg);
+  height: 120px;
+  left: 80px;
+  top: 70px;
+}
+
+#snake3 {
+  transform: rotate(-10deg);
+  height: 80px;
+  left: 220px;
+  top: 180px;
+}
+
+#ladder1 {
+  transform: rotate(-35deg);
+  height: 80px;
+  left: 110px;
+  top: 210px;
+}
+
+#ladder2 {
+  transform: rotate(45deg);
+  height: 80px;
+  left: 210px;
+  top: 110px;
+}
+
+#ladder3 {
+  transform: rotate(-45deg);
+  height: 80px;
+  left: 10px;
+  top: 110px;
+}
+
+.button {
+  font-size: 8px;
+}
