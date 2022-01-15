@@ -12,243 +12,370 @@ const rollDice = () => getRandomIndex(6);
 // playerIcon.className = "player-icon";
 let playerCurrentPosition;
 let destinationArray;
+let userId;
 
 /** GAME SETUP */
-const board = document.getElementById("boardInner");
+const boardDiv = document.getElementById("boardInner");
+const board = document.createElement("table");
+board.id = "board";
+boardDiv.append(board);
+const invisibleGrid = document.createElement("table");
+invisibleGrid.id = "invisibleGrid";
+boardDiv.append(invisibleGrid);
 const leftPanel = document.getElementById("leftPanel");
 const rightPanel = document.getElementById("rightPanel");
 
-const boardLength = 6;
+const boardLength = 10;
+const playerIcons = [
+  "🐶",
+  "🐻",
+  "🐼",
+  "🦁",
+  "🐮",
+  "🐷",
+  "🐵",
+  "🐥",
+  "🐴",
+  "🦄",
+  "🐺",
+  "🐙",
+  "🐳",
+  "⛄️",
+];
 
 /** Create array of numbers for each square on the board so that we can tag each square with the relevant id number */
 let boardArray = [];
-for (let i = 0; i < 6; i += 1) {
+for (let i = 0; i < boardLength; i += 1) {
   let row = [];
-  for (let j = 0; j < 6; j += 1) {
-    row.push(j + i * 6 + 1);
+  for (let j = 0; j < boardLength; j += 1) {
+    if (i % 2 == 1) {
+      row.push(i * boardLength + (boardLength - j));
+    } else {
+      row.push(j + i * boardLength + 1);
+    }
   }
   boardArray.push(row);
 }
 boardArray.reverse();
-console.log(boardArray);
+
+// Create an array of positions for truths
+const truths = [8, 20, 32, 36, 41, 68, 96];
+// Create an array of positions for dares
+const dares = [13, 23, 46, 59, 70, 83];
+// Create an array of positions for +1 shot
+const hellShots = [10, 16, 21, 44, 50, 66, 80, 87, 92];
+// Create an array of positions for newRule
+const newRule = [26, 48, 63];
+// Create an array of positions for special rule
+const special = [18, 53, 76];
 
 /** Render board and rollDice button */
 const renderBoard = () => {
-  for (let i = 0; i < boardLength; ++i) {
-    const row = document.createElement("div");
-    row.className = "row";
-    row.style.flexDirection = i % 2 === 1 ? "" : "row-reverse";
-    row.style.background = i % 2 === 1 ? "white" : "rgb(252, 227, 148)";
-    for (var j = 0; j < boardLength; ++j) {
-      var square = document.createElement("div");
-      square.className = "square";
-      square.id = boardArray[i][j];
-      console.log("SQUARE ID", Number(square.id) % 4);
+  const makeBoard = (boardLength, board) => {
+    // j is the x axis, i is the y axis
+    for (let i = 0; i < boardLength; i += 1) {
+      const row = board.insertRow(i);
+      row.classList.add("row");
 
-      square.innerText = boardArray[i][j];
-      row.appendChild(square);
-      if (Number(square.id) % 8 == 7) {
-        const truthOrDare = document.createElement("div");
-        truthOrDare.innerText = "TRUTH OR DARE";
-        truthOrDare.className = "truthOrDare";
-        square.appendChild(truthOrDare);
-      }
-      if (Number(square.id) % 7 == 6) {
-        const takeAShot = document.createElement("div");
-        takeAShot.innerText = "Drink Up";
-        takeAShot.className = "takeAShot";
-        square.appendChild(takeAShot);
+      for (let j = 0; j < boardLength; j += 1) {
+        const square = row.insertCell();
+        square.innerText = boardArray[i][j];
+        if (truths.includes(boardArray[i][j])) {
+          // square.style.background = "rgb(255, 255, 255, 0.4)";
+          square.style.background = "rgb(69, 120, 230, 0.5)";
+          const truthDiv = document.createElement("div");
+          truthDiv.innerText = "Truth";
+          truthDiv.classList.add("truth");
+          // truthDiv.style.color = "black";
+          square.appendChild(truthDiv);
+        }
+        if (dares.includes(boardArray[i][j])) {
+          // console.log(boardArray[i][j]);
+
+          square.style.background = "rgba(0, 0, 0, 0.5)";
+          const dareDiv = document.createElement("div");
+          dareDiv.innerText = "Dare";
+          dareDiv.classList.add("dare");
+          square.appendChild(dareDiv);
+        }
+        if (hellShots.includes(boardArray[i][j])) {
+          square.style.background = "rgb(230, 14, 14, 0.5)";
+          const hellShots = document.createElement("div");
+          hellShots.innerText = "+1";
+          hellShots.classList.add("hellShots");
+          square.appendChild(hellShots);
+        }
+        if (newRule.includes(boardArray[i][j])) {
+          square.style.background = "rgb(97, 0, 253, 0.35)";
+          const newRule = document.createElement("div");
+          newRule.innerText = "New Rule";
+          newRule.classList.add("newRule");
+          square.appendChild(newRule);
+        }
+        if (special.includes(boardArray[i][j])) {
+          square.style.background = "rgb(253, 122, 0, 0.5)";
+          const special = document.createElement("div");
+          special.innerText = "⭐️";
+          special.classList.add("special");
+          square.appendChild(special);
+        }
+        if (boardArray[i][j] == 1) {
+          square.style.background = "rgba(5, 162, 55, 0.6)";
+          const start = document.createElement("div");
+          start.innerText = "START";
+          start.classList.add("start");
+          square.innerText = "";
+          square.appendChild(start);
+        }
+        if (boardArray[i][j] == 100) {
+          square.style.background = "rgba(196, 13, 13, 0.5)";
+          const winDiv = document.createElement("div");
+          winDiv.innerText = "Hell Shot";
+          winDiv.classList.add("win");
+          square.innerText = "";
+          square.appendChild(winDiv);
+        }
+        square.classList.add("square");
+        square.id = boardArray[i][j];
       }
     }
-    board.appendChild(row);
-    showSnake = () => {
-      const img = document.createElement("img");
-      img.src = "/snakemini.png";
-      board.appendChild(img);
+  };
+
+  const makeInvisibleGrid = (boardLength, board) => {
+    // j is the x axis, i is the y axis
+    for (let i = 0; i < boardLength; i += 1) {
+      const row = board.insertRow(i);
+      row.classList.add("playerRow");
+
+      for (let j = 0; j < boardLength; j += 1) {
+        const square = row.insertCell();
+        square.classList.add("playerSquare");
+        square.id = boardArray[i][j];
+      }
+    }
+  };
+
+  makeBoard(boardLength, board);
+  makeInvisibleGrid(boardLength, invisibleGrid);
+  console.log("boardLength", boardLength);
+  console.log("board", board);
+
+  //   for (let i = 0; i < boardLength; ++i) {
+  //     const row = document.createElement("div");
+  //     row.className = "row";
+  //     row.style.flexDirection = i % 2 === 1 ? "" : "row-reverse";
+  //     row.style.background = i % 2 === 1 ? "white" : "rgb(252, 227, 148)";
+  //     for (var j = 0; j < boardLength; ++j) {
+  //       var square = document.createElement("div");
+  //       square.className = "square";
+  //       square.id = boardArray[i][j];
+  //       console.log("SQUARE ID", Number(square.id) % 4);
+
+  //       square.innerText = boardArray[i][j];
+  //       row.appendChild(square);
+  //       // if (Number(square.id) % 8 == 7) {
+  //       //   const truthOrDare = document.createElement("div");
+  //       //   truthOrDare.innerText = "TRUTH OR DARE";
+  //       //   truthOrDare.className = "truthOrDare";
+  //       //   square.appendChild(truthOrDare);
+  //       // }
+  //       // if (Number(square.id) % 7 == 6) {
+  //       //   const takeAShot = document.createElement("div");
+  //       //   takeAShot.innerText = "Drink Up";
+  //       //   takeAShot.className = "takeAShot";
+  //       //   square.appendChild(takeAShot);
+  //       // }
+  //     }
+  //     board.appendChild(row);
+  //   }
+};
+
+/** Create upperDiv and lowerDiv */
+const upperDiv = document.createElement("div");
+upperDiv.className = "upperDiv";
+rightPanel.append(upperDiv);
+
+const lowerDiv = document.createElement("div");
+lowerDiv.className = "lowerDiv";
+rightPanel.append(lowerDiv);
+
+/** Create button to roll dice */
+
+const rollDiceButton = document.createElement("button");
+rollDiceButton.innerText = "Roll Dice";
+rollDiceButton.className = "button";
+upperDiv.append(rollDiceButton);
+
+/** Create display div to show dice value */
+const diceValueDisplay = document.createElement("div");
+diceValueDisplay.innerText = "";
+diceValueDisplay.id = "diceResult";
+upperDiv.append(diceValueDisplay);
+
+/** Create restart button */
+const restartButton = document.createElement("button");
+restartButton.innerText = "Start Over";
+restartButton.className = "button";
+lowerDiv.append(restartButton);
+
+/** Create logout button */
+const logOutButton = document.createElement("button");
+
+logOutButton.className = "button";
+logOutButton.id = "logOut";
+logOutButton.innerText = "Log Out";
+lowerDiv.append(logOutButton);
+
+/** Create login button */
+const logInButton = document.createElement("button");
+
+logInButton.className = "button";
+logInButton.id = "logIn";
+logInButton.innerText = "Log In";
+lowerDiv.append(logInButton);
+
+/** Create signup button */
+const signUpButton = document.createElement("button");
+
+signUpButton.className = "button";
+signUpButton.id = "signUp";
+signUpButton.innerText = "Sign Up";
+lowerDiv.append(signUpButton);
+
+// To be modified - axios get player names, modify
+restartButton.addEventListener("click", async () => {
+  console.lo("SERVER GAME STATE", serverGameState);
+  myUserIdArray = Object.keys(serverGameState.players);
+  for (let i = 0; i < myUserIdArray.length; i++) {
+    serverGameState[myUserIdArray[i]] = {
+      playerPosition: 1,
     };
   }
 
-  /** Create button to roll dice */
-  const rollDiceButton = document.createElement("button");
-  rollDiceButton.innerText = "Roll Dice";
-  rollDiceButton.className = "btn btn-primary btn-sm btn-block button";
-  rightPanel.append(rollDiceButton);
+  // const cleanGameState = {
+  //   gameState: {
+  //     playersNames: {
+  //       player1: "Tristan",
+  //       player2: "Playboy Foong",
+  //     },
+  //     playersPosition: {
+  //       player1: "1",
+  //       player2: "1",
+  //     },
+  //     playerShotCounter: {
+  //       player1: "0",
+  //       player2: "0",
+  //     },
+  //     winner: "",
+  //   },
+  // };
 
-  /** Create restart button */
-  const restartButton = document.createElement("button");
-  restartButton.innerText = "Start Over";
-  restartButton.className = "btn btn-primary btn-sm btn-block button";
-  rightPanel.append(restartButton);
+  // // Remove playerIcon from current position
+  // destinationCell.removeChild(playerIcon);
 
-  /** Create logout button */
-  const logOutButton = document.createElement("button");
+  // // Get cell on board for player to go to
+  // destinationCell = document.getElementById(1);
 
-  logOutButton.className = "btn btn-primary btn-sm btn-block button";
-  logOutButton.id = "logOut";
-  logOutButton.innerText = "Log Out";
-  rightPanel.append(logOutButton);
+  // // Move player to destinationCell
+  // destinationCell.appendChild(playerIcon);
 
-  /** Create login button */
-  const logInButton = document.createElement("button");
+  // AXIOS GET PLAYER NAMES AND MODIFY CLEAN GAME STATE TO INSERT THEIR NAMES
+  await axios.put("/start", { gameState: serverGameState });
+  // console.log("RESTART TEST", serverGameState);
+  socket.emit("updatedGameState", updatedGameState);
+});
 
-  logInButton.className = "btn btn-primary btn-sm btn-block button";
-  logInButton.id = "logIn";
-  logInButton.innerText = "Log In";
-  rightPanel.append(logInButton);
+let diceValue;
+/** Add event listener to rollDice button */
+rollDiceButton.addEventListener("click", async () => {
+  const token = localStorage.getItem("sampleAuthToken");
+  if (!token) {
+    return alert(`Please log in to play the game`);
+  }
+  diceValue = rollDice();
 
-  /** Create signup button */
-  const signUpButton = document.createElement("button");
+  const diceResult = document.getElementById("diceResult");
+  diceResult.innerHTML = diceValue;
 
-  signUpButton.className = "btn btn-primary btn-sm btn-block button";
-  signUpButton.id = "signUp";
-  signUpButton.innerText = "Sign Up";
-  rightPanel.append(signUpButton);
+  // get player's current position
+  // const result = await axios.get("/start/gamestate");
+  // console.log(result);
+  // const id = result.data.result.id;
+  // let latestGameState = result.data.result.gameState;
+  // console.log("gameState", latestGameState);
+  // playerCurrentPosition = latestGameState.playersPosition.player1;
+  playerCurrentPosition = serverGameState.players[myUserId].playerPosition;
 
-  // To be modified - axios get player names, modify
-  restartButton.addEventListener("click", async () => {
-    temporarySocketIDArray = Object.keys(serverGameState.players);
-    for (let i = 0; i < temporarySocketIDArray.length; i++) {
-      serverGameState.players[temporarySocketIDArray[i]] = {
-        playerPosition: 1,
-      };
-    }
+  // Tabulate new position of player (integer)
+  const playerNewPosition = Number(playerCurrentPosition) + diceValue;
 
-    // const cleanGameState = {
-    //   gameState: {
-    //     playersNames: {
-    //       player1: "Tristan",
-    //       player2: "Playboy Foong",
-    //     },
-    //     playersPosition: {
-    //       player1: "1",
-    //       player2: "1",
-    //     },
-    //     playerShotCounter: {
-    //       player1: "0",
-    //       player2: "0",
-    //     },
-    //     winner: "",
-    //   },
-    // };
+  console.log("current position", playerCurrentPosition);
+  console.log("dice", diceValue);
 
-    // // Remove playerIcon from current position
-    // destinationCell.removeChild(playerIcon);
-
-    // // Get cell on board for player to go to
-    // destinationCell = document.getElementById(1);
-
-    // // Move player to destinationCell
-    // destinationCell.appendChild(playerIcon);
-
-    // AXIOS GET PLAYER NAMES AND MODIFY CLEAN GAME STATE TO INSERT THEIR NAMES
-    await axios.put("/start", { gameState: serverGameState });
-    // console.log("RESTART TEST", serverGameState);
-    const result = await axios.get("/start/gamestate");
-    const updatedGameState = result.data.result.gameState;
-    socket.emit("updatedGameState", updatedGameState);
-  });
-
-  let diceValue;
-  /** Add event listener to rollDice button */
-  rollDiceButton.addEventListener("click", async () => {
-    const token = localStorage.getItem("sampleAuthToken");
-    if (!token) {
-      return alert(`Please log in to play the game`);
-    }
-
-    diceValue = rollDice();
-
-    // get player's current position
-    // const result = await axios.get("/start/gamestate");
-    // console.log(result);
-    // const id = result.data.result.id;
-    // let latestGameState = result.data.result.gameState;
-    // console.log("gameState", latestGameState);
-    // playerCurrentPosition = latestGameState.playersPosition.player1;
+  if (playerNewPosition <= boardLength ** 2) {
+    playerCurrentPosition = playerNewPosition;
+  } else if (playerNewPosition > boardLength ** 2) {
     playerCurrentPosition =
-      serverGameState.players[temporarySocketID].playerPosition;
+      boardLength ** 2 - (playerNewPosition - boardLength ** 2);
+  }
 
-    // Tabulate new position of player (integer)
-    const playerNewPosition = Number(playerCurrentPosition) + diceValue;
+  console.log("new position", playerCurrentPosition);
+  // update latestGameState with new position
+  // latestGameState.playersPosition.player1 = `${playerCurrentPosition}`;
+  serverGameState.players[myUserId].playerPosition = playerCurrentPosition;
 
-    console.log("current position", playerCurrentPosition);
-    console.log("dice", diceValue);
+  const config = {
+    headers: { UserID: userId },
+  };
+  await axios.put("/start", { gameState: serverGameState }, config);
+  socket.emit("updatedGameState", serverGameState);
 
-    if (playerNewPosition <= 36) {
-      playerCurrentPosition = playerNewPosition;
-    } else if (playerNewPosition > 36) {
-      playerCurrentPosition = 36 - (playerNewPosition - 36);
-    }
+  // // Remove playerIcon from current position
+  // destinationCell.removeChild(playerIcon);
 
-    console.log("new position", playerCurrentPosition);
-    // update latestGameState with new position
-    // latestGameState.playersPosition.player1 = `${playerCurrentPosition}`;
-    serverGameState.players[temporarySocketID].playerPosition =
-      playerCurrentPosition;
+  // // Get cell on board for player to go to
+  // destinationCell = document.getElementById(playerCurrentPosition);
 
+  // // Move player to destinationCell
+  // destinationCell.appendChild(playerIcon);
+
+  /** shots and ladders special */
+  if (playerCurrentPosition == 18) {
+    playerCurrentPosition = 6;
+    console.log("CHANGED");
+  }
+
+  if (playerCurrentPosition == 27) {
+    playerCurrentPosition = 16;
+    console.log("CHANGED");
+  }
+
+  if (playerCurrentPosition == 35) {
+    playerCurrentPosition = 25;
+    console.log("CHANGED");
+  }
+
+  if (playerCurrentPosition == 4) {
+    playerCurrentPosition = 10;
+    console.log("CHANGED");
+  }
+
+  if (playerCurrentPosition == 14) {
+    playerCurrentPosition = 24;
+    console.log("CHANGED");
+  }
+
+  if (playerCurrentPosition == 17) {
+    playerCurrentPosition = 19;
+    console.log("CHANGED");
+  }
+
+  setTimeout(async () => {
+    serverGameState.players[myUserId].playerPosition = playerCurrentPosition;
     await axios.put("/start", { gameState: serverGameState });
-    const result = await axios.get("/start/gamestate");
-    const updatedGameState = result.data.result.gameState;
-    socket.emit("updatedGameState", updatedGameState);
-
-    // // Remove playerIcon from current position
-    // destinationCell.removeChild(playerIcon);
-
-    // // Get cell on board for player to go to
-    // destinationCell = document.getElementById(playerCurrentPosition);
-
-    // // Move player to destinationCell
-    // destinationCell.appendChild(playerIcon);
-
-    if (playerCurrentPosition == 18) {
-      playerCurrentPosition = 6;
-      console.log("CHANGED");
-    }
-
-    if (playerCurrentPosition == 27) {
-      playerCurrentPosition = 16;
-      console.log("CHANGED");
-    }
-
-    if (playerCurrentPosition == 35) {
-      playerCurrentPosition = 25;
-      console.log("CHANGED");
-    }
-
-    if (playerCurrentPosition == 4) {
-      playerCurrentPosition = 10;
-      console.log("CHANGED");
-    }
-
-    if (playerCurrentPosition == 14) {
-      playerCurrentPosition = 24;
-      console.log("CHANGED");
-    }
-
-    if (playerCurrentPosition == 17) {
-      playerCurrentPosition = 19;
-      console.log("CHANGED");
-    }
-
-    console.log(
-      "TEST",
-      serverGameState.players[temporarySocketID].playerPosition
-    );
-    setTimeout(async () => {
-      serverGameState.players[temporarySocketID].playerPosition =
-        playerCurrentPosition;
-      await axios.put("/start", { gameState: serverGameState });
-      const result2 = await axios.get("/start/gamestate");
-      const updatedGameState2 = result2.data.result.gameState;
-      console.log(
-        "settimeout activated",
-        playerCurrentPosition,
-        updatedGameState2.players[temporarySocketID].playerPosition
-      );
-      socket.emit("updatedGameState", updatedGameState2);
-    }, 3000);
-  });
-};
+    socket.emit("updatedGameState", serverGameState);
+  }, 3000);
+});
 
 renderBoard();
 
@@ -361,7 +488,7 @@ const socket = io(`http://localhost:3004`);
 let serverGameState;
 let myUserId;
 let playerName;
-let temporarySocketID;
+// let temporarySocketID;
 
 let playerTurn;
 let allPlayersPositions;
@@ -372,77 +499,145 @@ let oldCell;
 
 const player1 = document.createElement("div");
 player1.id = "player1";
+player1.innerText = playerIcons[0];
 player1.className = "player-icon";
 const player2 = document.createElement("div");
 player2.id = "player2";
-player2.className = "player-icon";
+player1.innerText = playerIcons[1];
+// player2.className = "player-icon";
 const player3 = document.createElement("div");
+player1.innerText = playerIcons[2];
 player3.id = "player3";
-player3.className = "player-icon";
+// player3.className = "player-icon";
 const player4 = document.createElement("div");
+player1.innerText = playerIcons[3];
 player4.id = "player4";
-player4.className = "player-icon";
-// const player5 = document.createElement("div");
-// player5.id = "player5";
+// player4.className = "player-icon";
+const player5 = document.createElement("div");
+player5.id = "player5";
 // player5.className = "player-icon";
-// const player6 = document.createElement("div");
-// player6.id = "player6";
+const player6 = document.createElement("div");
+player6.id = "player6";
 // player6.className = "player-icon";
-// document.getElementsByClassName("player-icon").style.display = "none";
 
-const destinationCell = document.getElementById("1");
-destinationCell.appendChild(player4);
-destinationCell.appendChild(player1);
-destinationCell.appendChild(player2);
-destinationCell.appendChild(player3);
+const playerArray = [player1, player2, player3, player4, player5, player6];
 
-// destinationCell.appendChild(player5);
-// destinationCell.appendChild(player6);
+
+/** START GAME WITHOUT SOCKETS */
 
 const startSocketGame = async () => {
   // get user ID
   const userIdData = await axios.get("/home/userid");
-  const userId = userIdData.data.userId;
+  userId = userIdData.data.userId;
   myUserId = userId;
   // get player name
   const config = {
-    headers: { UserID: userId },
+    headers: { UserID: myUserId },
   };
   const playerNameData = await axios.get("home/playername", config);
   playerName = playerNameData.data.playerName;
   console.log("myUserId", myUserId);
   console.log("playerName", playerName);
 
-  // Step 0: get userId + name from users table using axios.get. Create global variable called myPlayerIndex and assign userId to it
+  // retrieve gameState from db
+  const result = await axios.get("/start/gameState");
+  const updatedGameState = result.data.result.gameState;
 
-  // Step 1: send socket.id over to server to generate new gamestate;
-  socket.emit("newPlayer", myUserId, playerName);
-
-  // Step 4: receive gamestate and store it in global variable in client side
-  socket.on("initialGameState", (gameState) => {
-    console.log("received gameState from server");
-    // store socket.id as global var called "temporarySocketID" for easy manipulation in future
-    const getKeyByValue = (object, value) => {
-      return Object.keys(object).find((key) => object[key].userId === value);
+  // If userId doesnt exist in updatedGameState, create a new key-value pair for the user
+  if (!updatedGameState.players[myUserId]) {
+    // New player details
+    updatedGameState.players[myUserId] = {
+      userId: userId, // get from db
+      playerName: playerName, // get from db
+      playerPosition: 1,
+      online: true,
     };
-    temporarySocketID = getKeyByValue(gameState.players, myUserId);
-    console.log("temporarySocketId", temporarySocketID);
-    serverGameState = gameState;
-    // axios.put to update db with modified gamestate
-    console.log("serverGameState", serverGameState);
+  }
+
+  allPlayersPositions = Object.values(updatedGameState.players).map(
+    (e) => e.playerPosition
+  );
+
+  // render each player's position according to position in gameState (player1 is the first player in gameState etc)
+  for (let i = 0; i < allPlayersPositions.length; i++) {
+    const destinationCell = document.getElementById(allPlayersPositions[i]);
+    destinationCell.appendChild(playerArray[i]);
+  }
+
+  // get gameId from cookie
+  window.getCookie = function (name) {
+    var match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+    if (match) return match[2];
+  };
+
+  const gameId = window.getCookie("gameId");
+
+  // destinationCell.appendChild(player5);
+  // destinationCell.appendChild(player6);
+  console.log("TESTTTTTTT", {
+    gameId: gameId,
+    gameState: updatedGameState,
+  });
+  /** Update DB with player info */
+  await axios.put("/start", { gameState: updatedGameState });
+  socket.emit("updatedGameState", {
+    gameId: gameId,
+    gameState: updatedGameState,
   });
 
-  socket.on("state", (gameState) => {
+  // add player info into gameState
+
+  // update gameState in db
+
+  // // Step 0: get userId + name from users table using axios.get. Create global variable called myPlayerIndex and assign userId to it
+
+  // // Step 1: send socket.id over to server to generate new gamestate;
+  // socket.emit("newPlayer", myUserId, playerName);
+
+  // // Step 4: receive gamestate and store it in global variable in client side
+  // socket.on("initialGameState", async (gameState) => {
+  //   console.log("received gameState from server");
+  //   // store socket.id as global var called "temporarySocketID" for easy manipulation in future
+  //   const getKeyByValue = (object, value) => {
+  //     return Object.keys(object).find((key) => object[key].userId === value);
+  //   };
+  //   temporarySocketID = getKeyByValue(gameState.players, myUserId);
+  //   console.log("temporarySocketId", temporarySocketID);
+  //   serverGameState = gameState;
+  //   // axios.post to create new game in db
+  //   console.log(
+  //     "creating game entry in db using this gameState:",
+  //     serverGameState
+  //   );
+  //   // await axios.post("/start", { gameState: serverGameState }, config);
+  // });
+
+  socket.on("state", (masterGameStateObject) => {
     // console.log(gameState);
     // temporarySocketID = Object.keys(gameState.players)[0];
-    serverGameState = gameState;
-    playerTurn = gameState.playerTurn;
-    allPlayersPositions = Object.values(gameState.players).map(
+    // get gameId from cookie
+    window.getCookie = function (name) {
+      var match = document.cookie.match(
+        new RegExp("(^| )" + name + "=([^;]+)")
+      );
+      if (match) return match[2];
+    };
+
+    const gameId = window.getCookie("gameId");
+
+    serverGameState = masterGameStateObject[gameId];
+    playerTurn = serverGameState.playerTurn;
+    // Create an array of all players' positions in the order which they appear in the serverGameState
+    allPlayersPositions = Object.values(serverGameState.players).map(
       (e) => e.playerPosition
     );
-    allPlayersUserId = Object.values(gameState.players).map((e) => e.userId);
-    allPlayersNames = Object.values(gameState.players).map((e) => e.playerName);
-    winner = gameState.winner;
+    allPlayersUserId = Object.values(serverGameState.players).map(
+      (e) => e.userId
+    );
+    allPlayersNames = Object.values(serverGameState.players).map(
+      (e) => e.playerName
+    );
+    winner = serverGameState.winner;
 
     console.log(serverGameState);
     console.log(allPlayersUserId.length);
@@ -466,6 +661,7 @@ const startSocketGame = async () => {
     // const destinCell = document.getElementById("1");
     // destinCell.removeChild(player1);
 
+    // Loop through all the players in the player array -> remove each player from parent element and re-render them in its new position (if theres no change, we will still go ahead with the loop)
     for (let i = 0; i < allPlayersUserId.length; i++) {
       const currentPlayer = document.getElementById(`player${i + 1}`);
       currentPlayer.parentElement.removeChild(currentPlayer);

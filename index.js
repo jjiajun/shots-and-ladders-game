@@ -38,11 +38,8 @@ const io = require("socket.io")(server);
 // let server = http.createServer(app);
 // let io = socketIO(server);​
 
-let gameStateOnServer = {
-  players: {},
-  playerTurn: "",
-  winner: "",
-};
+let masterGameStateObject = {};
+// let gameStateOnServer;
 
 io.on("connection", (socket) => {
   console.log("a user connected");
@@ -58,31 +55,35 @@ io.on("connection", (socket) => {
   // socket.emit('<STRING>', <DATA_OBJ>);
   // socket.on('<STRING>', <FUNCTION>);
 
-  socket.on("newPlayer", (userId, playerName) => {
-    // Step 2: identify socket.id of new player and generate new empty GameState
-    gameStateOnServer.players[socket.id] = {
-      userId: userId, // get from db
-      playerName: playerName, // get from db
-      playerPosition: 1,
-    };
-    console.log("gameStateOnServer", gameStateOnServer);
-    // Step 3: Send gamestate to client
-    socket.emit("initialGameState", gameStateOnServer);
-  });
+  /** NO LONGER NEEDED BECAUSE CHANGED THE WAY GAME IS SETUP */
+  // socket.on("newPlayer", (userId, playerName) => {
+  //   // Step 2: identify socket.id of new player and generate new empty GameState
+  //   gameStateOnServer.players[socket.id] = {
+  //     userId: userId, // get from db
+  //     playerName: playerName, // get from db
+  //     playerPosition: 1,
+  //   };
+  //   console.log("gameStateOnServer", gameStateOnServer);
+  //   // Step 3: Send gamestate to client
+  //   socket.emit("initialGameState", gameStateOnServer);
+  // });
 
-  socket.on("updatedGameState", (updatedGameState) => {
-    gameStateOnServer = updatedGameState;
+  socket.on("updatedGameState", (data) => {
+    console.log(data);
+    const gameId = Object.values(data)[0];
+    const updatedGameState = Object.values(data)[1];
+    masterGameStateObject[gameId] = updatedGameState;
   });
 
   socket.on("disconnect", function () {
     console.log("user disconnected");
-    delete gameStateOnServer.players[socket.id];
+    // delete object by its socket id here
   });
 });
 // Step 7: continuously emit gameStateOnServer so that all clients receive updated gameStates at any one time
 setInterval(async () => {
   // const result = await axios.get("/start/gamestate");
   // console.log(result);
-  io.sockets.emit("state", gameStateOnServer);
+  io.sockets.emit("state", masterGameStateObject);
 }, 1000 / 2);
 // server.listen(PORT);

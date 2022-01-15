@@ -1,0 +1,15 @@
+<%- include('partials/head') %>
+
+  <body>
+    <div>
+      <div id='chooseGameContainer'>
+        <button id='createNewGame'>CREATE NEW GAME</button>
+        <button id='joinGame'>JOIN GAME</button>
+      </div>
+      <div id='divOfAvailableGames'></div>
+    </div>
+    
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/choose-game-script.js"></script>
+    <%- include ('partials/footer') %>

@@ -8,8 +8,8 @@ class UserController extends BaseController {
     super(name, model, db);
   }
 
-  welcome(req, res) {
-    return res.status(200).render("welcome");
+  chooseGame(req, res) {
+    return res.status(200).render("choosegame");
   }
 
   getLogIn(req, res) {
@@ -93,16 +93,21 @@ class UserController extends BaseController {
     if (!user) {
       res.status(404).json({ err: "user not found" });
     }
-    const compare = await bcrypt.compare(password, user.password);
-    console.log(compare);
 
-    if (compare) {
-      const payload = { id: user.id, email: user.email };
-      const token = jwt.sign(payload, JWT_SALT, { expiresIn: "5mins" });
-      console.log("log in completed");
-      return res.status(200).json({ success: true, token });
+    try {
+      const compare = await bcrypt.compare(password, user.password);
+      console.log(compare);
+
+      if (compare) {
+        const payload = { id: user.id, email: user.email };
+        const token = jwt.sign(payload, JWT_SALT, { expiresIn: "5mins" });
+        console.log("log in completed");
+        return res.status(200).json({ success: true, token });
+      }
+    } catch (err) {
+      console.log(err);
+      // return res.status(401).json({ error: "wrong password" });
     }
-    return res.status(401).json({ error: "wrong password" });
   }
 }
 

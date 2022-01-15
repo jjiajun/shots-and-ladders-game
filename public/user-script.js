@@ -14,7 +14,7 @@ $(document).ready(function () {
       console.log(localStorage);
       JsLoadingOverlay.hide();
 
-      window.location.replace("../start");
+      window.location.replace("../home/login");
     } catch (err) {
       alert(`invalid email or username`);
       JsLoadingOverlay.hide();
@@ -44,7 +44,7 @@ $(document).ready(function () {
       //   headers: { Authorization: `Bearer ${token}` },
       // };
       // axios.get("/start", config);
-      window.location.replace("../start");
+      window.location.replace("../home");
       JsLoadingOverlay.hide();
     } catch (err) {
       console.log(err);

@@ -11,15 +11,22 @@ class GameController extends BaseController {
     return res.status(200).render("game");
   }
 
-  async postMethod(req, res) {
+  async postGameState(req, res) {
     try {
-      const { data } = req.body;
-      const output = await this.model.create({
-        gameState: data,
+      const { gameState } = req.body;
+      const userId = req.header("UserID");
+      const gamePostOutput = await this.model.create({
+        gameState: gameState,
       });
+
+      console.log("GAME ID", gamePostOutput.id);
+      const currentGame = await this.model.findByPk(gamePostOutput.id);
+      console.log("currentGame", currentGame);
+      const output = await currentGame.setUsers(userId);
+      console.log(output);
+      res.cookie("gameId", gamePostOutput.id);
       return res.status(200).json({
-        success: `This is my POST function in my ${this.name} controller`,
-        output,
+        success: `Created a new game entry in games db via ${this.name} controller`,
       });
     } catch (err) {
       return res.status(400).json({ err });
@@ -29,13 +36,17 @@ class GameController extends BaseController {
   async putMethod(req, res) {
     try {
       const { gameState } = req.body;
+      const userId = req.header("UserID");
+      // console.log("Cookies:", req.cookies);
+      const { gameId } = req.cookies;
+
       const update = await this.model.update(
         {
           gameState: gameState,
         },
         {
           where: {
-            id: 2,
+            id: gameId,
           },
         }
       );
@@ -47,11 +58,21 @@ class GameController extends BaseController {
 
   async getGameState(req, res) {
     try {
+      const { gameId } = req.cookies;
       const result = await this.model.findOne({
         where: {
-          id: 2,
+          id: gameId,
         },
       });
+      res.status(200).send({ result });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async getAllGamesData(req, res) {
+    try {
+      const result = await this.model.findAll();
       res.status(200).send({ result });
     } catch (err) {
       console.log(err);
