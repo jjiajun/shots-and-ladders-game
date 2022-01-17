@@ -356,8 +356,8 @@ button {
 }
 
 #diceResult {
-  width: 70px;
-  height: 70px;
+  width: 80px;
+  height: 80px;
   background-color: rgb(0, 0, 0, 0.2);
   margin: 5px;
   text-align: center;
