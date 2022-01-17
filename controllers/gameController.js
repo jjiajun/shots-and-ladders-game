@@ -36,7 +36,6 @@ class GameController extends BaseController {
   async putMethod(req, res) {
     try {
       const { gameState } = req.body;
-      const userId = req.header("UserID");
       // console.log("Cookies:", req.cookies);
       const { gameId } = req.cookies;
 
@@ -74,6 +73,22 @@ class GameController extends BaseController {
     try {
       const result = await this.model.findAll();
       res.status(200).send({ result });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async deleteGameState(req, res) {
+    try {
+      console.log("delete function is called");
+      const { gameId } = req.cookies;
+      const gameRecord = await this.model.findOne({
+        where: {
+          id: gameId,
+        },
+      });
+      
+      res.status(200).send("delete completed");
     } catch (err) {
       console.log(err);
     }

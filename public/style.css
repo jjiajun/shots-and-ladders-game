@@ -1,7 +1,7 @@
 body {
-  background: linear-gradient(-45deg, #969de0, rgb(235, 167, 167)), #e69278;
+  background: linear-gradient(-45deg, #96b8e0, rgb(235, 169, 167), #8a9ceb);
   background-size: 800% 800%;
-  animation: gradient 15s ease infinite;
+  animation: gradient 20s ease infinite;
   height: 100vh;
 }
 
@@ -15,6 +15,11 @@ body {
   100% {
     background-position: 0% 50%;
   }
+}
+
+:disabled {
+  color: rgb(182, 182, 182) !important;
+  background-color: rgba(15, 15, 15, 0.5) !important;
 }
 
 #boardOuter {
@@ -38,7 +43,6 @@ body {
 
 #board {
   border: solid white 1px;
-  background-color: rgba(0, 0, 0, 0.1);
 }
 
 #invisibleGrid {
@@ -51,9 +55,11 @@ body {
 }
 
 #leftPanel {
-  /* width: 100px;
-  height: 100%;
-  margin-left: 24px; */
+  margin: 30px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: black;
 }
 
 #rightPanel {
@@ -62,6 +68,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
 }
 
 .label {
@@ -72,7 +79,76 @@ body {
   justify-content: center;
 }
 
-.row, .playerRow {
+button {
+  font-family: "Cinzel";
+  font-weight: 900;
+  cursor: pointer;
+}
+.default-pointer {
+  cursor: pointer;
+}
+#createNewGame,
+#joinGame {
+  width: 160px;
+  height: 35px;
+  margin: 30px;
+  font-size: 12px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  /* border-radius: 50%; */
+}
+
+#divOfAvatars {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#select-avatar-title,
+#choose-game-title {
+  align-self: center;
+  font-family: "Cinzel";
+  font-weight: 900;
+  font-size: 26px;
+}
+
+#game-title-div {
+  width: 300px;
+  height: 35px;
+  align-self: center;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 40px;
+  font-family: "Cinzel";
+  font-weight: 900;
+  font-size: 20px;
+}
+
+#avatar-selection-div {
+  height: 300px;
+  width: 500px;
+  display: flex;
+  flex-wrap: wrap;
+  line-height: 50px;
+  justify-content: center;
+  align-content: flex-start;
+  font-size: 35px;
+  align-self: center;
+}
+
+.avatar-button {
+  background-color: transparent;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  border: transparent;
+  text-align: center;
+  padding: 0px;
+  margin: 15px;
+}
+
+.row,
+.playerRow {
   display: flex;
   /* width: 300px;
   height: 50px; */
@@ -86,33 +162,52 @@ body {
   display: flex;
   margin: 0px;
   position: relative;
-  /* animation: fadeIn 1s; */
   border: solid 1px white;
-  /* border-top: solid 1px black; */
-  /* align-items: end; */
-  /* padding: 1px 4px; */
   font-size: 8px;
   text-align: end;
   color: white;
 }
 
-.playerSquare {
-  width: 50px;
-  height: 50px;
-  display: flex;
-  margin: 0px;
+.player-square {
   position: relative;
-  font-size: 20px;
-  text-align: center;
-  color: white;
-}
-
-.playerSquare {
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+  width: 50px;
+  height: 50px;
+  color: white;
+  z-index: 2;
+  flex-wrap: wrap;
+  /* removes line spacing between icons after introducing flex-wrap */
+  align-content: center;
+  line-height: 18px;
+  background-color: rgba(0, 0, 0, 0.15);
 }
+
+.player-icon {
+  font-size: 18px !important;
+  padding: 2px;
+  /* margin: -2px; */
+  border-radius: 50%;
+  z-index: 3;
+}
+/* 
+#player1 {
+  background-color: rgb(33, 210, 216);
+}
+
+#player3 {
+  background-color: rgb(240, 74, 184);
+}
+
+#player2 {
+  background-color: rgb(0, 187, 9);
+}
+
+#player4 {
+  background-color: rgb(255, 209, 82);
+} */
 
 .truth,
 .dare,
@@ -146,70 +241,16 @@ body {
 .special {
   font-size: 16px;
 }
-} */
-
-.player-icon {
-  border-radius: 100%;
-  width: 20px;
-  height: 20px;
-  margin: auto;
-  z-index: 3;
-  font-size: 20px !important;
-}
-
-/* #player1 {
-  background-color: rgb(216, 25, 25);
-  float: initial;
-  z-index: 1;
-  border: 1px solid black;
-}
-#player2 {
-  background-color: rgb(16, 108, 184);
-  z-index: 2;
-  float: initial;
-}
-#player3 {
-  background-color: rgb(255, 217, 0);
-  z-index: 2;
-  float: initial;
-}
-#player4 {
-  background-color: rgb(10, 192, 137);
-  z-index: 2;
-  float: initial;
-}
-#player5 {
-  background-color: purple;
-}
-#player6 {
-  background-color: pink;
-} */
-
-/* .truthOrDare {
-  font-size: 7px;
-  margin: auto;
-  color: red;
-  width: 30px;
-  z-index: 0;
-} */
-
-.takeAShot {
-  font-size: 7px;
-  margin: auto;
-  color: black;
-  font-weight: bold;
-  z-index: 0;
-}
 
 .snake {
   position: absolute;
-  z-index: 2;
+  z-index: 1;
 }
 
 .ladder {
   position: absolute;
   height: 80px;
-  z-index: 2;
+  z-index: 1;
 }
 
 .shot {
@@ -309,12 +350,12 @@ body {
 
 .button {
   font-size: 8px;
-  display:block;
+  display: block;
   color: white;
-  background-color: rgb(0, 0, 0, 0.4);
+  background-color: rgb(0, 0, 0, 0.52);
   /* border: white solid 1px; */
   font-size: 9px;
-  width: 70px;
+  width: 80px;
   height: 2rem;
   margin: 5px;
   font-size: 9px;
@@ -338,7 +379,6 @@ body {
   font-weight: 100;
 }
 
-
 /* overlay when screen is too small */
 @media screen and (max-height: 550px) {
   #overlay {
@@ -350,7 +390,7 @@ body {
     right: 0;
     bottom: 0;
     background-color: #8b8282c5;
-    z-index: 4;
+    z-index: 3;
   }
 
   #overlay-text {
@@ -378,15 +418,6 @@ body {
   flex-direction: row;
   width: 100vw;
   justify-content: center;
-}
-
-#createNewGame, #joinGame {
-  width: 25%;
-  height: 25%;
-  margin: 30px;
-  background-color:  rgba(0, 0, 0, 0.5);
-  color: white;
-  /* border-radius: 50%; */
 }
 
 .availableGamesCell {

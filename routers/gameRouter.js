@@ -7,5 +7,6 @@ module.exports = (controller, auth) => {
   router.put("/", controller.putMethod.bind(controller));
   router.get("/gamestate", controller.getGameState.bind(controller));
   router.get("/allgamesdata", controller.getAllGamesData.bind(controller));
+  router.get("/delete", controller.deleteGameState.bind(controller));
   return router;
 };

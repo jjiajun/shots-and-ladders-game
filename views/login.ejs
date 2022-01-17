@@ -1,50 +1,71 @@
 <%- include('partials/head') %>
 
-    <div class="container">
-      <div class="row justify-content-center mt-5">
-        <div class="col-md-8">
-          <!-- <h2 class="text-center m-3">TIME CHARM</h2> -->
-          <div class="card">
-            <div class="card-header">Login</div>
-            <div class="card-body">
-
-              <form class="form-horizontal" id="logInForm">
-
-
-                <div class="form-group">
-                  <label for="email" class="cols-sm-2 control-label">Your Email</label>
-                  <div class="cols-sm-10">
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
-                      <input type="text" class="form-control" name="email" id="email" placeholder="Enter your Email" />
-                    </div>
-                  </div>
+<div class="container">
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+      <!-- <h2 class="text-center m-3">TIME CHARM</h2> -->
+      <div class="card">
+        <div class="card-header">Login</div>
+        <div class="card-body">
+          <form class="form-horizontal" id="logInForm">
+            <div class="form-group">
+              <label for="email" class="cols-sm-2 control-label"
+                >Your Email</label
+              >
+              <div class="cols-sm-10">
+                <div class="input-group">
+                  <span class="input-group-addon"
+                    ><i class="fa fa-envelope fa" aria-hidden="true"></i
+                  ></span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="email"
+                    id="email"
+                    placeholder="Enter your Email"
+                  />
                 </div>
-
-                <div class="form-group">
-                  <label for="password" class="cols-sm-2 control-label">Password</label>
-                  <div class="cols-sm-10">
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                      <input type="password" class="form-control" name="password" id="password"
-                        placeholder="Enter your Password" />
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-group ">
-                  <button type="submit" class="btn btn-primary btn-lg btn-block login-button">Login</button>
-                </div>
-                <div class="login-register">
-                  <a href="/home/signup">Sign Up</a>
-                </div>
-              </form>
+              </div>
             </div>
 
-          </div>
+            <div class="form-group">
+              <label for="password" class="cols-sm-2 control-label"
+                >Password</label
+              >
+              <div class="cols-sm-10">
+                <div class="input-group">
+                  <span class="input-group-addon"
+                    ><i class="fa fa-lock fa-lg" aria-hidden="true"></i
+                  ></span>
+                  <input
+                    type="password"
+                    class="form-control"
+                    name="password"
+                    id="password"
+                    placeholder="Enter your Password"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg btn-block login-button"
+              >
+                Login
+              </button>
+            </div>
+            <div class="login-register">
+              <a href="/home/signup">Sign Up</a>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-    <script src="/user-script.js"></script>
+  </div>
+</div>
+<script src="/00-global-var-func.js"></script>
+<script src="/02-user-setup.js"></script>
 
-    <%- include ('partials/footer') %>
+<%- include ('partials/footer') %>
