@@ -241,6 +241,10 @@ button {
   position: absolute;
 }
 
+.win {
+  font-size: 22px;
+}
+
 /* base position: left: 13px; top: 12px */
 #beer-1 {
   height: 82px;

@@ -72,7 +72,7 @@ const renderBoard = () => {
         if (hellShots.includes(boardArray[i][j])) {
           square.style.background = "rgb(230, 14, 14, 0.5)";
           const hellShots = document.createElement("div");
-          hellShots.innerText = "+1";
+          hellShots.innerText = "+1 SHOT";
           hellShots.classList.add("hellShots");
           square.appendChild(hellShots);
         }
@@ -99,9 +99,10 @@ const renderBoard = () => {
           square.appendChild(start);
         }
         if (boardArray[i][j] == 100) {
-          square.style.background = "rgba(196, 13, 13, 0.5)";
+          // square.style.background = "rgba(196, 13, 13, 0.5)";
+          square.style.background = "rgba(255, 202, 58)";
           const winDiv = document.createElement("div");
-          winDiv.innerText = "Hell Shot";
+          winDiv.innerText = "🛌";
           winDiv.classList.add("win");
           square.innerText = "";
           square.appendChild(winDiv);
