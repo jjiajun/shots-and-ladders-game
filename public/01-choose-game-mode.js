@@ -53,6 +53,7 @@ $("#createNewGame").click(async (e) => {
   JsLoadingOverlay.show();
   e.preventDefault();
   document.getElementById("joinGame").style.display = "none";
+  document.getElementById("createNewGame").style.display = "none";
   try {
     const userIdData = await axios.get("/home/userid");
     userId = userIdData.data.userId;
@@ -79,6 +80,7 @@ $("#joinGame").click(async (e) => {
   JsLoadingOverlay.show();
   e.preventDefault();
   document.getElementById("createNewGame").style.display = "none";
+  document.getElementById("joinGame").style.display = "none";
   const userIdData = await axios.get("/home/userid");
   userId = userIdData.data.userId;
 

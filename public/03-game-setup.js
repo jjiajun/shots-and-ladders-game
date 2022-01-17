@@ -41,6 +41,10 @@ const newRule = [26, 48, 63];
 // Create an array of positions for special rule
 const special = [18, 53, 76];
 
+const gameTitle = document.createElement("h1");
+gameTitle.innerText = localStorage.getItem("gameTitle");
+document.getElementById("gameTitle").append(gameTitle);
+
 /** Render board and rollDice button */
 const renderBoard = () => {
   const makeBoard = (boardLength, board) => {

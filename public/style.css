@@ -91,7 +91,7 @@ button {
 #joinGame {
   width: 160px;
   height: 35px;
-  margin: 15px 30px 40px 30px;
+  margin: 0px 30px 40px 30px;
   font-size: 12px;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
@@ -455,7 +455,7 @@ h1 {
   font-family: "Cinzel";
   font-weight: 100;
   margin: auto;
-  font-size: 60px;
+  font-size: 50px;
 
   /* for gradient text */
   /* background: -webkit-linear-gradient(
@@ -467,11 +467,19 @@ h1 {
   -webkit-text-fill-color: transparent; */
 }
 
-.homeTitle {
+#homeTitle {
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100vw;
   padding-top: 30px;
-  padding-bottom: 10px;
+  padding-bottom: 30px;
+}
+
+#gameTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100vw;
+  padding-top: 25px;
 }
