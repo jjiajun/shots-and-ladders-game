@@ -52,6 +52,7 @@ const generateAvatarSelection = () => {
 $("#createNewGame").click(async (e) => {
   JsLoadingOverlay.show();
   e.preventDefault();
+  document.getElementById("joinGame").style.display = "none";
   try {
     const userIdData = await axios.get("/home/userid");
     userId = userIdData.data.userId;
@@ -77,6 +78,7 @@ $("#createNewGame").click(async (e) => {
 $("#joinGame").click(async (e) => {
   JsLoadingOverlay.show();
   e.preventDefault();
+  document.getElementById("createNewGame").style.display = "none";
   const userIdData = await axios.get("/home/userid");
   userId = userIdData.data.userId;
 
