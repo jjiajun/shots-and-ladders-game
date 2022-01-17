@@ -81,6 +81,8 @@ const startGame = async () => {
   for (let i = 0; i < allPlayersPositions.length; i++) {
     const player = playerArray[allPlayersNos[i] - 1];
     player.innerText = allPlayersAvatar[i];
+    player.setAttribute("title", playerName);
+
     const destinationCell = document.getElementById(allPlayersPositions[i]);
     destinationCell.appendChild(player);
     playersDisplayedOnBoard.push(allPlayersNos[i]); // integer only
@@ -152,6 +154,8 @@ setInterval(async () => {
     if (!playersDisplayedOnBoard.includes(allPlayersNos[i])) {
       const player = playerArray[allPlayersNos[i] - 1];
       player.innerText = allPlayersAvatar[i];
+      player.setAttribute("title", playerName);
+
       const destinationCell = document.getElementById(allPlayersPositions[i]);
       destinationCell.appendChild(player);
       console.log(`appended player${allPlayersNos[i]}`);
@@ -160,7 +164,7 @@ setInterval(async () => {
       // refresh page with other player's new avatar in case it wasnt updated above
       const player = playerArray[allPlayersNos[i] - 1];
       player.innerText = allPlayersAvatar[i];
-
+      player.setAttribute("title", playerName);
       const currentPlayer = playerArray[allPlayersNos[i] - 1];
       console.log(currentPlayer);
       currentPlayer.parentElement.removeChild(currentPlayer);

@@ -125,11 +125,12 @@ $("#joinGame").click(async (e) => {
           }
         }
         if (j == 2) {
-          cell.classList.add("go");
           if (i == 0) {
+            cell.classList.add("goHeader");
             cell.classList.add("header");
             cell.innerText = "";
           } else {
+            cell.classList.add("go");
             cell.innerText = "Join Room";
             cell.classList.add("default-pointer");
             cell.addEventListener("click", async () => {
@@ -157,6 +158,14 @@ $("#joinGame").click(async (e) => {
     }
 
     $("#divOfAvailableGames").append(tableOfAvailableGames);
+    const goBack = document.createElement("button");
+    goBack.classList.add("button");
+    goBack.innerText = "Go back";
+    $("#goBackDiv").append(goBack);
+    $("#goBackDiv").click(() => {
+      window.location.replace("../home");
+    });
+
     JsLoadingOverlay.hide();
   } catch (err) {
     console.log(err);

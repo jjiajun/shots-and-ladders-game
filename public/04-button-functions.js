@@ -1,5 +1,5 @@
 $("#leaveGame").click(async () => {
-  if (Object.keys(updatedGameState.players).length > 1) {
+  if (Object.keys(updatedGameState.players).length > 0) {
     const playerNo = localStorage.getItem("playerNo");
     const playerIndex = playersDisplayedOnBoard.indexOf(playerNo);
     playersDisplayedOnBoard.splice(playerIndex, 1);

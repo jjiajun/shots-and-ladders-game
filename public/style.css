@@ -188,6 +188,9 @@ button {
 .player-icon {
   font-size: 18px !important;
   padding: 2px;
+  display: flex;
+  flex-direction: column;
+  cursor: default;
   /* margin: -2px; */
   border-radius: 50%;
   z-index: 3;
@@ -429,8 +432,19 @@ button {
 
 #divOfAvailableGames {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+#goBackDiv {
+  display: flex;
+  width: 500px;
+  margin: auto;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding: 20px 0px;
 }
 
 .header {
@@ -442,7 +456,8 @@ button {
   width: 150px;
 }
 
-.go {
+.go,
+.goHeader {
   width: 100px;
 }
 
