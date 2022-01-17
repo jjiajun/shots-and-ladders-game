@@ -182,7 +182,7 @@ button {
   /* removes line spacing between icons after introducing flex-wrap */
   align-content: center;
   line-height: 18px;
-  background-color: rgba(0, 0, 0, 0.15);
+  background-color: rgba(0, 0, 0, 0.12);
 }
 
 .player-icon {
