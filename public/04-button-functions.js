@@ -22,6 +22,9 @@ $("#leaveGame").click(async () => {
 });
 
 $("#goToLobby").click(async () => {
+  alert(
+    "You are leaving the game room temporarily. You may enter again and continue where you left off."
+  );
   window.location.replace("./home");
 });
 
