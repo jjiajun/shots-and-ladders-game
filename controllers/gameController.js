@@ -82,12 +82,12 @@ class GameController extends BaseController {
     try {
       console.log("delete function is called");
       const { gameId } = req.cookies;
-      const gameRecord = await this.model.findOne({
+      await this.model.destroy({
         where: {
           id: gameId,
         },
       });
-      
+
       res.status(200).send("delete completed");
     } catch (err) {
       console.log(err);

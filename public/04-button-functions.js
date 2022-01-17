@@ -1,15 +1,22 @@
 $("#leaveGame").click(async () => {
-  if (Object.keys(updatedGameState.players).length > 0) {
+  if (Object.keys(updatedGameState.players).length > 1) {
     const playerNo = localStorage.getItem("playerNo");
     const playerIndex = playersDisplayedOnBoard.indexOf(playerNo);
     playersDisplayedOnBoard.splice(playerIndex, 1);
     delete updatedGameState.players[userId];
+    const gameName = updatedGameState.gameTitle;
     await axios.put("/start", { gameState: updatedGameState });
+    alert(
+      `You left the game. Your player data has been erased from this game room.`
+    );
   } else {
     const playerNo = localStorage.getItem("playerNo");
     const playerIndex = playersDisplayedOnBoard.indexOf(playerNo);
     playersDisplayedOnBoard.splice(playerIndex, 1);
     await axios.get("/start/delete");
+    alert(
+      "You left the game. There are no more players in the room. The room data has been deleted."
+    );
   }
   window.location.replace("./home");
 });
