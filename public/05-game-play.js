@@ -186,4 +186,4 @@ setInterval(async () => {
   if (allPlayersUserId[turnIndex - 1] == userId) {
     document.getElementById("rollDiceButton").disabled = false;
   }
-}, 100);
+}, 300);

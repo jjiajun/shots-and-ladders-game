@@ -1,4 +1,7 @@
 $("#leaveGame").click(async () => {
+  localStorage.removeItem("avatarId");
+  localStorage.removeItem("playerNo");
+  localStorage.removeItem("gameTitle");
   if (Object.keys(updatedGameState.players).length > 1) {
     const playerNo = localStorage.getItem("playerNo");
     const playerIndex = playersDisplayedOnBoard.indexOf(playerNo);
@@ -31,9 +34,7 @@ $("#goToLobby").click(async () => {
 $("#restartButton").click(async () => {
   userIdArray = Object.keys(updatedGameState.players);
   for (let i = 0; i < userIdArray.length; i++) {
-    updatedGameState.players[userIdArray[i]] = {
-      playerPosition: 1,
-    };
+    updatedGameState.players[userIdArray[i]].playerPosition = 1;
   }
   updatedGameState.playerTurnIndex = 1;
   await axios.put("/start", { gameState: updatedGameState });
