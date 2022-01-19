@@ -2,20 +2,17 @@ $("#leaveGame").click(async () => {
   localStorage.removeItem("avatarId");
   localStorage.removeItem("playerNo");
   localStorage.removeItem("gameTitle");
+  const playerNo = localStorage.getItem("playerNo");
+  const playerIndex = playersDisplayedOnBoard.indexOf(playerNo);
+  playersDisplayedOnBoard.splice(playerIndex, 1);
+
   if (Object.keys(updatedGameState.players).length > 1) {
-    const playerNo = localStorage.getItem("playerNo");
-    const playerIndex = playersDisplayedOnBoard.indexOf(playerNo);
-    playersDisplayedOnBoard.splice(playerIndex, 1);
     delete updatedGameState.players[userId];
-    const gameName = updatedGameState.gameTitle;
     await axios.put("/start", { gameState: updatedGameState });
     alert(
       `You left the game. Your player data has been erased from this game room.`
     );
   } else {
-    const playerNo = localStorage.getItem("playerNo");
-    const playerIndex = playersDisplayedOnBoard.indexOf(playerNo);
-    playersDisplayedOnBoard.splice(playerIndex, 1);
     await axios.get("/start/delete");
     alert(
       "You left the game. There are no more players in the room. The room data has been deleted."
@@ -50,8 +47,8 @@ $("#rollDiceButton").click(async () => {
   updatedGameState.playerTurnIndex += 1;
 
   console.log("UPDATED GAMESTATE", updatedGameState.players);
-  diceValue = rollDice();
-  // diceValue = 1;
+  // diceValue = rollDice();
+  diceValue = 99;
 
   const diceResult = document.getElementById("diceResult");
   diceResult.innerHTML = diceValue;
@@ -65,11 +62,27 @@ $("#rollDiceButton").click(async () => {
   console.log("current position", playerCurrentPosition);
   console.log("dice", diceValue);
 
-  if (playerNewPosition <= boardLength ** 2) {
+  if (playerNewPosition < boardLength ** 2) {
     playerCurrentPosition = playerNewPosition;
   } else if (playerNewPosition > boardLength ** 2) {
     playerCurrentPosition =
       boardLength ** 2 - (playerNewPosition - boardLength ** 2);
+  } else {
+    const playerNo = localStorage.getItem("playerNo");
+    const playerIndex = playersDisplayedOnBoard.indexOf(playerNo);
+    playersDisplayedOnBoard.splice(playerIndex, 1);
+
+    if (Object.keys(updatedGameState.players).length > 1) {
+      delete updatedGameState.players[userId];
+      updatedGameState.winner = localStorage.getItem("playerName");
+      await axios.put("/start", { gameState: updatedGameState });
+    } else {
+      await axios.get("/start/delete");
+      alert(
+        "All players have completed the game. The game room will now be deleted."
+      );
+      window.location.replace("./home");
+    }
   }
 
   console.log("new position", playerCurrentPosition);
@@ -97,15 +110,15 @@ $("#rollDiceButton").click(async () => {
     console.log("special move is triggered");
     moveToSpecialPositions(climbStart, climbEnd);
     moveToSpecialPositions(fallStart, fallEnd);
+
+    console.log("Player position after ladder/snake", playerCurrentPosition);
+
+    // Update player's position after 1000ms
+    setTimeout(async () => {
+      updatedGameState.players[userId].playerPosition = playerCurrentPosition;
+      await axios.put("/start", { gameState: updatedGameState });
+    }, 1000);
   }
-
-  console.log("Player position after ladder/snake", playerCurrentPosition);
-
-  // Update player's position after 1000ms
-  setTimeout(async () => {
-    updatedGameState.players[userId].playerPosition = playerCurrentPosition;
-    await axios.put("/start", { gameState: updatedGameState });
-  }, 1000);
 });
 
 // --> LOG OUT FUNCTION (DELETE TOKEN)

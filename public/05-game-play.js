@@ -10,6 +10,7 @@ const startGame = async () => {
   };
   const playerNameData = await axios.get("home/playername", config);
   playerName = playerNameData.data.playerName;
+  localStorage.setItem("playerName", playerName);
   console.log("userId", userId);
   console.log("playerName", playerName);
 
@@ -95,6 +96,10 @@ startGame();
 setInterval(async () => {
   // retrieve gameState from db
   const result = await axios.get("/start/gamestate");
+
+  if (!result.data.result) {
+    window.location.replace("./home");
+  }
   updatedGameState = result.data.result.gameState;
 
   // Get current player's turn (UNUSED YET)
@@ -122,6 +127,18 @@ setInterval(async () => {
 
   // Get winner's name if available
   winner = updatedGameState.winner;
+
+  if (winner) {
+    if (winner == localStorage.getItem("playerName")) {
+      alert(
+        `You won the game. You may continue to spectate or leave the room.`
+      );
+    } else {
+      alert(`${winner} won the game. ${winner} is going to bed now.`);
+    }
+    updatedGameState.winner = "";
+    await axios.put("/start", { gameState: updatedGameState });
+  }
 
   console.log(updatedGameState);
   // console.log(`There are ${allPlayersUserId.length} players currently `);
